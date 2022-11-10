@@ -1,0 +1,73 @@
+Timing Diagram of the Register with Reset
+
+reset = 초기화 시키는 것 reset이 들어오면 init 값이 0 이라고 가정
+
+Register with Enable
+
+Enable 신호가 1이면 데이터가 들어간다. -> 기다리고 있던 데이터가 들어감
+
+val enableReg = Reg(UInt (4.W))  : enable된 레지스터 값 
+
+when (enable) {       // enable 값이 true일때
+
+enableReg := inVal    //데이터가 들어감
+
+}
+
+단, Reg 이나 RegInit는 clock와 상관없이 값이 들어감  // nextReg는 제외
+
+
+A Register with Reset and Enable
+
+val resetEnableReg = RegInit (0.U(4.W)) // reset하면서 enable시킨 값이 초기값
+
+when (enable) {
+
+resetEnableReg := inVal
+
+}
+
+val risingEdge = din & !RegNext(din)  //  clock 에 risingEdge가 들어간 회로 
+
+din이 참이고 동시에 din으로 업데이트된 reg값에 ! 가 & 된다. 
+
+
+A Register with an Adder is a Counter
+
+카운터 레지스터 =: 데이터가 4-bit가 들어온다면 0000 -> 0001 -> ... 1111 -> 0000
+
+val cntReg = RegInit (0.U(4.W))   4비트 
+
+cntReg := cntReg + 1.U  //현재 카운트값을 항상 1씩 증가 . (링카운터)
+
+
+A Counter with a Mux
+
+val cntReg = RegInit (0.U(8.W))
+
+cntReg := Mux(cntReg === 9.U, 0.U, cntReg + 1.U) // 현재 값이 9면은 다음 카운터에 더하지말고 1로 가자
+
+
+Counting Events
+
+val cntEventsReg = RegInit (0.U(4.W))  // 처음에 reg를 초기화 시켜주고 
+
+when(event) {
+
+cntEventsReg := cntEventsReg + 1.U  //event가 발생했을때 1을 카운트 해줌
+
+}
+
+Counting Up and Down
+
+val cntReg = RegInit (0.U(8.W))
+
+cntReg := cntReg + 1.U    //카운트를 더해준다 . 
+
+when(cntReg === N) {
+
+cntReg := 0.U       
+  
+}  // Down카운트도 동일
+
+
