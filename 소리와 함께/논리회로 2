@@ -27,9 +27,11 @@ resetEnableReg := inVal
 
 }
 
-val risingEdge = din & !RegNext(din)  //  clock 에 risingEdge가 들어간 회로 
-
+val risingEdge = din & !RegNext(din)  //  q는 din을 받아서 clock을 받아서 작동하는 값의 NOT && din  
+din이 0에서 1로 바뀌는 순간에 risingEdge가 1이 됨
 din이 참이고 동시에 din으로 업데이트된 reg값에 ! 가 & 된다. 
+
+!din & RegNext(din)는 반대로 하강하는 순간에 1
 
 
 A Register with an Adder is a Counter
